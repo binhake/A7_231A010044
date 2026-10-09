@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ImageView imgAnh;
     private TextView tvTrangThai;
+    private String dongAnh;   // dòng kích thước ảnh, giữ lại để onResume không ghi đè mất
 
     // ---------------------------------------------------------------
     // 1) Bộ xin quyền CAMERA.
@@ -77,8 +78,9 @@ public class MainActivity extends AppCompatActivity {
             (Bitmap bitmap) -> {
                 if (bitmap != null) {
                     imgAnh.setImageBitmap(bitmap);
-                    tvTrangThai.setText(getString(R.string.status_photo,
-                            bitmap.getWidth(), bitmap.getHeight()));
+                    dongAnh = getString(R.string.status_photo,
+                            bitmap.getWidth(), bitmap.getHeight());
+                    capNhatTrangThai();
                 } else {
                     Toast.makeText(this, R.string.photo_cancelled, Toast.LENGTH_SHORT).show();
                 }
@@ -222,6 +224,9 @@ public class MainActivity extends AppCompatActivity {
         String s = getString(R.string.status_format,
                 camera ? getString(R.string.granted) : getString(R.string.denied),
                 thongBao ? getString(R.string.granted) : getString(R.string.denied));
+        if (dongAnh != null) {
+            s += "\n" + dongAnh;
+        }
         tvTrangThai.setText(s);
         Log.d(TAG, s.replace("\n", " | "));
     }
